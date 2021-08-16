@@ -1,0 +1,11 @@
+league:
+  id: 268268
+  info_url: https://fantasy.premierleague.com/api/leagues-classic/${id}/standings/
+  history_url: https://fantasy.premierleague.com/api/entry/${id}/history/
+
+player:
+  banned_list:
+    - 6978530
+  not_betting_list:
+    - 15811807 # Thẩm Trung
+    - 15809531 # Duy Toai

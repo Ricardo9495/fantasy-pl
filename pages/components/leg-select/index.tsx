@@ -67,3 +67,5 @@ export const LegSelect = (props: LegSelectProps) => {
     </FormControl>
   )
 }
+
+export default LegSelect

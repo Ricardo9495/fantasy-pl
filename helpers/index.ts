@@ -1,4 +1,4 @@
-import { Team } from "../pages/models"
+import { Team } from "../models"
 
 const CONFIG = {
   LEAGUE_ID: '268268',

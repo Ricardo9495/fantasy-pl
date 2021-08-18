@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import theme from '../../../theme'
-import { Team } from '../../models'
+import { Team } from '../../../models'
 import clsx from 'clsx'
 import { HELPERS } from '../../../helpers'
 
@@ -55,14 +55,18 @@ export const ReportTable = (props: ReportTableProps) => {
     }
   }, [isFirstLeg])
 
-  const weekHeaders = teamList[0].history
-    .slice(fromWeek, toWeek)
-    .reverse()
-    .map((week) => (
-      <TableCell key={`week${week.event}`}>{`GW${week.event}`}</TableCell>
-    ))
+  const weekHeaders =
+    Array.isArray(teamList) &&
+    Array.isArray(teamList[0].history) &&
+    teamList[0].history
+      .slice(fromWeek, toWeek)
+      .reverse()
+      .map((week) => (
+        <TableCell key={`week${week.event}`}>{`GW${week.event}`}</TableCell>
+      ))
 
   const weekResults = (team: Team) =>
+    Array.isArray(team.history) &&
     team.history
       .slice(fromWeek, toWeek)
       .reverse()
@@ -91,45 +95,48 @@ export const ReportTable = (props: ReportTableProps) => {
           {weekHeaders}
         </TableHead>
         <TableBody>
-          {teamList.map((team, index) => (
-            <TableRow key={team.player_name}>
-              <TableCell>{index + 1}</TableCell>
-              <TableCell>
-                <List>
-                  <ListItem className={classes.entryName}>
-                    {team.entry_name}
-                  </ListItem>
-                  <ListItem>{team.player_name}</ListItem>
-                </List>
-              </TableCell>
-              <TableCell>{team.total}</TableCell>
-              <TableCell>
-                {isFirstLeg ? team.firstLegTotal : team.secondLegTotal}
-              </TableCell>
-              <TableCell>
-                <List>
-                  <ListItem>
-                    {team.isBetting
-                      ? isFirstLeg
-                        ? team.firstLegWeeklyWinningMoney
-                        : team.sencondLegWeeklyWinningMoney
-                      : '-'}
-                  </ListItem>
-                  {team.legWinningMoney !== 0 && (
-                    <ListItem>
-                      <Typography
-                        variant="caption"
-                        color="primary"
-                      >{`(+${team.legWinningMoney})`}</Typography>
+          {Array.isArray(teamList) &&
+            teamList.map((team, index) => (
+              <TableRow key={team.player_name}>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>
+                  <List>
+                    <ListItem className={classes.entryName}>
+                      {team.entry_name}
                     </ListItem>
-                  )}
-                </List>
-              </TableCell>
-              {weekResults(team)}
-            </TableRow>
-          ))}
+                    <ListItem>{team.player_name}</ListItem>
+                  </List>
+                </TableCell>
+                <TableCell>{team.total}</TableCell>
+                <TableCell>
+                  {isFirstLeg ? team.firstLegTotal : team.secondLegTotal}
+                </TableCell>
+                <TableCell>
+                  <List>
+                    <ListItem>
+                      {team.isBetting
+                        ? isFirstLeg
+                          ? team.firstLegWeeklyWinningMoney
+                          : team.sencondLegWeeklyWinningMoney
+                        : '-'}
+                    </ListItem>
+                    {team.legWinningMoney !== 0 && (
+                      <ListItem>
+                        <Typography
+                          variant="caption"
+                          color="primary"
+                        >{`(+${team.legWinningMoney})`}</Typography>
+                      </ListItem>
+                    )}
+                  </List>
+                </TableCell>
+                {weekResults(team)}
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </TableContainer>
   )
 }
+
+export default ReportTable

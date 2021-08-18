@@ -1,4 +1,4 @@
-import { HELPERS } from '../../helpers'
+import { HELPERS } from '../helpers'
 
 export class Team {
   id: string
@@ -60,3 +60,14 @@ interface WeekResults {
   points_on_bench: number
   win?: boolean
 }
+
+export const createTeam = (params: Team, histories: Array<WeekResults>) => {
+  return new Team(params, histories)
+}
+
+export const TeamModel = {
+  Team,
+  createTeam,
+}
+
+export default TeamModel

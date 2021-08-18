@@ -14,11 +14,3 @@ a {
 * {
   box-sizing: border-box;
 }
-
-@font-face {
-  font-family: 'PremierSans';
-  src: url('/fonts/PremierSans.otf');
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}

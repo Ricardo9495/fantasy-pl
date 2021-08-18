@@ -22,8 +22,8 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flow-root',
       fontFamily: 'PremierSans',
     },
-    selectEmpty: {
-      marginTop: theme.spacing(2),
+    label: {
+      margin: theme.spacing(1),
     },
   })
 )
@@ -42,7 +42,12 @@ export const LegSelect = (props: LegSelectProps) => {
 
   return (
     <FormControl variant="outlined" className={classes.formControl}>
-      <Typography align="left" display="inline">
+      <Typography
+        align="left"
+        display="inline"
+        variant="subtitle1"
+        className={classes.label}
+      >
         SELECT PHASE
       </Typography>
       <Select

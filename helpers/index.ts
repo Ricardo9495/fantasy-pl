@@ -6,7 +6,10 @@ const CONFIG = {
   LEAGUE_HISTORY_URL: 'https://fantasy.premierleague.com/api/entry/${id}/history/',
   BANNED_LIST: ['3176134'],
   NOT_BETTING_LIST: ['2698093', '2697661'],
-  BETTING: 200,
+  WEEKLY_BET: 200,
+  LEG_BET: 1000,
+  FIRST_POS_RATIO: 0.7,
+  SECOND_POS_RATIO: 0.3,
   FIRST_LEG_RANGE: {
     FROM_WEEK: 0,
     TO_WEEK: 18,
@@ -41,12 +44,21 @@ const teamList = async () => {
     const teamList: Array<Team> = await teamWithHistoriesList(league)
     const teamListWithLegsPoints: Array<Team> = calculateLegsPoint(teamList)
     const teamListWithBet: Array<Team> = calculateBet(teamListWithLegsPoints);
-    const sortedTeamList = sortTeamlist(teamListWithBet);
+    const sortedTeamList: Array<Team> = sortTeamlist(teamListWithBet);
+    const fullCalculateTeamList: Array<Team> = calculateLegWinningBet(sortedTeamList);
 
-    return sortedTeamList
+    return fullCalculateTeamList;
   } catch (error) {
     return []
   }
+}
+
+const calculateLegWinningBet = (sortedTeamList: Array<Team>) => {
+  const bettingTeamList = sortedTeamList.filter(team => team.isBetting);
+  bettingTeamList[0].legWinningMoney = (bettingTeamList.length - 2) * CONFIG.LEG_BET * CONFIG.FIRST_POS_RATIO
+  bettingTeamList[1].legWinningMoney = (bettingTeamList.length - 2) * CONFIG.LEG_BET * CONFIG.SECOND_POS_RATIO
+
+  return sortedTeamList;
 }
 
 const leagueInfo = async () => {
@@ -117,9 +129,18 @@ const calculateBet = (teamList: Array<Team>) => {
     bettingTeamList.forEach((team) => {
       const week = team.history[index];
       if (week.win) {
-        team.winning_money += (loser * CONFIG.BETTING) / winner;
+        if (index <= CONFIG.FIRST_LEG_RANGE.TO_WEEK) {
+          team.firstLegWeeklyWinningMoney += (loser * CONFIG.WEEKLY_BET) / winner;
+        } else {
+          team.sencondLegWeeklyWinningMoney += (loser * CONFIG.WEEKLY_BET) / winner;
+        }
+
       } else {
-        team.winning_money -= CONFIG.BETTING;
+        if (index <= CONFIG.FIRST_LEG_RANGE.TO_WEEK) {
+          team.firstLegWeeklyWinningMoney -= CONFIG.WEEKLY_BET;
+        } else {
+          team.sencondLegWeeklyWinningMoney -= CONFIG.WEEKLY_BET;
+        }
       }
     })
   }

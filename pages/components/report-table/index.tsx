@@ -9,6 +9,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import theme from '../../../theme'
@@ -105,7 +106,25 @@ export const ReportTable = (props: ReportTableProps) => {
               <TableCell>
                 {isFirstLeg ? team.firstLegTotal : team.secondLegTotal}
               </TableCell>
-              <TableCell>{team.isBetting ? team.winning_money : '-'}</TableCell>
+              <TableCell>
+                <List>
+                  <ListItem>
+                    {team.isBetting
+                      ? isFirstLeg
+                        ? team.firstLegWeeklyWinningMoney
+                        : team.sencondLegWeeklyWinningMoney
+                      : '-'}
+                  </ListItem>
+                  {team.legWinningMoney !== 0 && (
+                    <ListItem>
+                      <Typography
+                        variant="caption"
+                        color="primary"
+                      >{`(+${team.legWinningMoney})`}</Typography>
+                    </ListItem>
+                  )}
+                </List>
+              </TableCell>
               {weekResults(team)}
             </TableRow>
           ))}

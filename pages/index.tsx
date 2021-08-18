@@ -27,7 +27,6 @@ export const Index = (props: IndexProps) => {
       <Header />
 
       <main className={styles.main}>
-        <p>Test PremierSans</p>
         <LegSelect isFirstLeg={isFirstLeg} setIsFirstLeg={setIsFirstLeg} />
         <ReportTable teamList={teamList} isFirstLeg={isFirstLeg} />
       </main>
@@ -44,18 +43,6 @@ export const Index = (props: IndexProps) => {
           </span>
         </a>
       </footer> */}
-      <style jsx>{`
-        @font-face {
-          font-family: 'PremierSans';
-          src: url('/fonts/PremierSans.otf');
-          font-style: normal;
-          font-weight: 400;
-          font-display: swap;
-        }
-        p {
-          font-family: 'PremierSans';
-        }
-      `}</style>
     </div>
   )
 }

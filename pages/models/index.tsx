@@ -10,7 +10,11 @@ export class Team {
   total: string
   entry: string
   entry_name: string
-  winning_money = 0
+  firstLegWeeklyWinningMoney: number
+  sencondLegWeeklyWinningMoney: number
+  sencondLegWinningMoney: number
+  firstLegWinningMoney: number
+  legWinningMoney: number
   winning_weeks: Array<number>
   history: Array<WeekResults>
   isBetting: boolean
@@ -27,7 +31,11 @@ export class Team {
     this.total = params.total
     this.entry = params.entry
     this.entry_name = params.entry_name
-    this.winning_money = 0
+    this.firstLegWeeklyWinningMoney = 0
+    this.firstLegWinningMoney = 0
+    this.sencondLegWeeklyWinningMoney = 0
+    this.sencondLegWinningMoney = 0
+    this.legWinningMoney = 0
     this.firstLegTotal = 0
     this.secondLegTotal = 0
     this.winning_weeks = []

@@ -84,7 +84,7 @@ const teamWithHistoriesList = async (teamList: Array<Team>) => {
     const res = await fetchInfo(
       concatApiUrlWithParameter(
         CONFIG.LEAGUE_HISTORY_URL,
-        team.entry
+        `${team.entry}`
       )
     )
 

@@ -1,14 +1,14 @@
 import { HELPERS } from '../helpers'
 
 export class Team {
-  id: string
+  id: number
   event_total: string
   player_name: string
   rank: string
   last_rank: string
   rank_sort: string
   total: string
-  entry: string
+  entry: number
   entry_name: string
   firstLegWeeklyWinningMoney: number
   sencondLegWeeklyWinningMoney: number
@@ -17,6 +17,7 @@ export class Team {
   legWinningMoney: number
   winning_weeks: Array<number>
   history: Array<WeekResults>
+  startBettingWeek: number
   isBetting: boolean
   firstLegTotal: number
   secondLegTotal: number
@@ -40,6 +41,7 @@ export class Team {
     this.secondLegTotal = 0
     this.winning_weeks = []
     this.history = histories
+    this.startBettingWeek = 1
     this.isBetting = !HELPERS.CONFIG.NOT_BETTING_LIST.includes(
       this.entry.toString()
     )
@@ -49,15 +51,15 @@ export class Team {
 interface WeekResults {
   event: number
   points: number
-  total_points: number
-  rank: number
-  rank_sort: number
-  overall_rank: number
-  bank: number
-  value: number
-  event_transfers: number
+  total_points?: number
+  rank?: number
+  rank_sort?: number
+  overall_rank?: number
+  bank?: number
+  value?: number
+  event_transfers?: number
   event_transfers_cost: number
-  points_on_bench: number
+  points_on_bench?: number
   win?: boolean
 }
 

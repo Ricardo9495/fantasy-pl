@@ -5,7 +5,7 @@ const CONFIG = {
   LEAGUE_INFO_URL: 'https://fantasy.premierleague.com/api/leagues-classic/${id}/standings/',
   LEAGUE_HISTORY_URL: 'https://fantasy.premierleague.com/api/entry/${id}/history/',
   BANNED_LIST: ['3176134'],
-  NOT_BETTING_LIST: ['2698093', '2697661'],
+  NOT_BETTING_LIST: ['2698093', '2697661', '7975182'],
   WEEKLY_BET: 200,
   LEG_BET: 1000,
   FIRST_POS_RATIO: 0.7,
@@ -93,7 +93,20 @@ const teamWithHistoriesList = async (teamList: Array<Team>) => {
   })
 
   const rest = await Promise.all(fullTeam)
-  return JSON.parse(JSON.stringify(rest))
+  const list: Array<Team> = JSON.parse(JSON.stringify(rest));
+  list.forEach((team: Team) => {
+    // Cuong start from 10
+    if (team.entry === 8275914) { team.startBettingWeek = 10 };
+    let startWeek = team.history[0].event;
+    const firstWeek = 1
+    if(startWeek !== firstWeek) {
+      while(startWeek > firstWeek) {
+        startWeek -= 1
+        team.history.unshift({event: startWeek, points: 0, event_transfers_cost: 0})
+      }
+    }
+  });
+  return list
 }
 
 const calculateLegsPoint = (teamList: Array<Team>) => {
@@ -114,35 +127,40 @@ const calculateBet = (teamList: Array<Team>) => {
     const highestPoint = Math.max(...weekPoints);
 
     bettingTeamList.forEach((team) => {
-      const week = team.history[index];
-      const week_point = week.points - week.event_transfers_cost;
-      if (week_point == highestPoint) {
-        week.win = true;
-        team.winning_weeks.push(index + 1);
-        winner++;
-      } else {
-        week.win = false;
-        loser++;
+      if (index >= team.startBettingWeek - 1) {
+        const week = team.history[index];
+        const week_point = week.points - week.event_transfers_cost;
+        if (week_point == highestPoint) {
+          week.win = true;
+          team.winning_weeks.push(index + 1);
+          winner++;
+        } else {
+          week.win = false;
+          loser++;
+        }
       }
     })
 
     bettingTeamList.forEach((team) => {
-      const week = team.history[index];
-      if (week.win) {
-        if (index <= CONFIG.FIRST_LEG_RANGE.TO_WEEK) {
-          team.firstLegWeeklyWinningMoney += (loser * CONFIG.WEEKLY_BET) / winner;
-        } else {
-          team.sencondLegWeeklyWinningMoney += (loser * CONFIG.WEEKLY_BET) / winner;
-        }
+      if (index >= team.startBettingWeek - 1) {
+            const week = team.history[index];
+          if (week.win) {
+            if (index <= CONFIG.FIRST_LEG_RANGE.TO_WEEK) {
+              team.firstLegWeeklyWinningMoney += (loser * CONFIG.WEEKLY_BET) / winner;
+            } else {
+              team.sencondLegWeeklyWinningMoney += (loser * CONFIG.WEEKLY_BET) / winner;
+            }
 
-      } else {
-        if (index <= CONFIG.FIRST_LEG_RANGE.TO_WEEK) {
-          team.firstLegWeeklyWinningMoney -= CONFIG.WEEKLY_BET;
-        } else {
-          team.sencondLegWeeklyWinningMoney -= CONFIG.WEEKLY_BET;
+          } else {
+            if (index <= CONFIG.FIRST_LEG_RANGE.TO_WEEK) {
+              team.firstLegWeeklyWinningMoney -= CONFIG.WEEKLY_BET;
+            } else {
+              team.sencondLegWeeklyWinningMoney -= CONFIG.WEEKLY_BET;
+            }
+          }
         }
       }
-    })
+    )
   }
 
   return teamList;

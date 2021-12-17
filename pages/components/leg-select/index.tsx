@@ -8,9 +8,13 @@ import {
 } from '@material-ui/core'
 import React from 'react'
 
+import Checkbox from '@material-ui/core/Checkbox';
+
 interface LegSelectProps {
   isFirstLeg: boolean
   setIsFirstLeg: React.Dispatch<React.SetStateAction<boolean>>
+  isDisplayAll: boolean
+  setIsDisplayAll: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -31,16 +35,25 @@ const useStyles = makeStyles((theme: Theme) =>
 const OPTIONS = ['LUOT DI', 'LUOT VE']
 
 export const LegSelect = (props: LegSelectProps) => {
-  const { isFirstLeg, setIsFirstLeg } = props
+  const { isFirstLeg, setIsFirstLeg, isDisplayAll, setIsDisplayAll } = props
   const classes = useStyles()
 
-  const handleChange = (
+  const handleSelectChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
     setIsFirstLeg(event.target.value === OPTIONS[0])
   }
 
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setIsDisplayAll(event.target.checked)
+  }
+
+  const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
   return (
+    <>
     <FormControl variant="outlined" className={classes.formControl}>
       <Typography
         align="left"
@@ -53,7 +66,7 @@ export const LegSelect = (props: LegSelectProps) => {
       <Select
         native
         value={isFirstLeg ? OPTIONS[0] : OPTIONS[1]}
-        onChange={handleChange}
+        onChange={handleSelectChange}
         inputProps={{
           id: 'outlined-age-native-simple',
         }}
@@ -64,7 +77,24 @@ export const LegSelect = (props: LegSelectProps) => {
           </option>
         ))}
       </Select>
+      <Typography
+          align="left"
+          display="inline"
+          variant="subtitle1"
+          className={classes.label}
+        >
+          DISPLAY ALL
+        </Typography>
+        <Checkbox
+          checked={isDisplayAll}
+          onChange={handleCheckboxChange}
+          inputProps={{ 'aria-label': 'controlled' }}
+      />
     </FormControl>
+    <FormControl variant="outlined" className={classes.formControl}>
+      <Checkbox {...label} defaultChecked />
+    </FormControl>
+    </>
   )
 }
 

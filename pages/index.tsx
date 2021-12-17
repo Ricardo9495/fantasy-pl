@@ -17,6 +17,7 @@ export const Index = (props: IndexProps) => {
   const currentDate = new Date().getTime()
   const startOf2ndLeg = new Date(HELPERS.CONFIG.START_DATE_OF_2ND_LEG).getTime()
   const [isFirstLeg, setIsFirstLeg] = useState(currentDate <= startOf2ndLeg)
+  const [isDisplayAll, setIsDisplayAll] = useState(false);
   return (
     <div className={styles.container}>
       <Head>
@@ -27,8 +28,8 @@ export const Index = (props: IndexProps) => {
       <Header />
 
       <main className={styles.main}>
-        <LegSelect isFirstLeg={isFirstLeg} setIsFirstLeg={setIsFirstLeg} />
-        <ReportTable teamList={teamList} isFirstLeg={isFirstLeg} />
+        <LegSelect isFirstLeg={isFirstLeg} setIsFirstLeg={setIsFirstLeg} isDisplayAll={isDisplayAll} setIsDisplayAll={setIsDisplayAll}/>
+        <ReportTable teamList={teamList} isFirstLeg={isFirstLeg} isDisplayAll={isDisplayAll}/>
       </main>
 
       {/* <footer className={styles.footer}>

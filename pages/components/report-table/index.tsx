@@ -61,7 +61,7 @@ export const ReportTable = (props: ReportTableProps) => {
     Array.isArray(teamList[0].history) &&
     teamList[0].history
       .slice(fromWeek, toWeek)
-      .slice(isDisplayAll ? (teamList[0].history.length - 2) : 0, teamList[0].history.length)
+      .slice(isDisplayAll ? 0: (teamList[0].history.length - 2), teamList[0].history.length)
       .reverse()
       .map((week) => (
         <TableCell key={`week${week.event}`}>{`GW${week.event}`}</TableCell>
@@ -71,7 +71,7 @@ export const ReportTable = (props: ReportTableProps) => {
     Array.isArray(team.history) &&
     team.history
       .slice(fromWeek, toWeek)
-      .slice(isDisplayAll ? (teamList[0].history.length - 2) : 0, teamList[0].history.length)
+      .slice(isDisplayAll ? 0: (teamList[0].history.length - 2), teamList[0].history.length)
       .reverse()
       .map((week) => (
         <TableCell

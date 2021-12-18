@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
       transform: 'scale(2)',
     },
     title: {
-      padding: '5.5rem 0px',
+      padding: '5.5rem 2rem',
       color: theme.palette.background.default,
     },
   })

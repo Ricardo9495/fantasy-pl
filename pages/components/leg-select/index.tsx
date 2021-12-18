@@ -3,12 +3,11 @@ import {
   FormControl,
   makeStyles,
   Select,
+  Switch,
   Theme,
   Typography,
 } from '@material-ui/core'
 import React from 'react'
-
-import Checkbox from '@material-ui/core/Checkbox';
 
 interface LegSelectProps {
   isFirstLeg: boolean
@@ -44,16 +43,11 @@ export const LegSelect = (props: LegSelectProps) => {
     setIsFirstLeg(event.target.value === OPTIONS[0])
   }
 
-  const handleCheckboxChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setIsDisplayAll(event.target.checked)
+  const handleCheckboxChange = () => {
+    setIsDisplayAll(!isDisplayAll)
   }
 
-  const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-
   return (
-    <>
     <FormControl variant="outlined" className={classes.formControl}>
       <Typography
         align="left"
@@ -85,16 +79,13 @@ export const LegSelect = (props: LegSelectProps) => {
         >
           DISPLAY ALL
         </Typography>
-        <Checkbox
+        <Switch
+          color="primary"
           checked={isDisplayAll}
           onChange={handleCheckboxChange}
           inputProps={{ 'aria-label': 'controlled' }}
-      />
+        />
     </FormControl>
-    <FormControl variant="outlined" className={classes.formControl}>
-      <Checkbox {...label} defaultChecked />
-    </FormControl>
-    </>
   )
 }
 

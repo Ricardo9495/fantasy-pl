@@ -9,6 +9,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TableSortLabel,
   Typography,
 } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
@@ -44,6 +45,7 @@ export const ReportTable = (props: ReportTableProps) => {
     HELPERS.CONFIG.FIRST_LEG_RANGE.FROM_WEEK
   )
   const [toWeek, setToWeek] = useState(HELPERS.CONFIG.FIRST_LEG_RANGE.TO_WEEK)
+  const [orderByTotal, setOrderByTotal] = useState(false)
   const classes = useStyles()
 
   useEffect(() => {
@@ -55,6 +57,16 @@ export const ReportTable = (props: ReportTableProps) => {
       setToWeek(HELPERS.CONFIG.SECOND_LEG_RANGE.TO_WEEK)
     }
   }, [isFirstLeg])
+
+  const handleSortByTotal = () => {
+    setOrderByTotal(!orderByTotal);
+  }
+
+  const getComparator = (a: Team, b: Team) => {
+    return orderByTotal
+    ? HELPERS.sortByTotal(a, b)
+    : HELPERS.sortByCurrentLegTotal(a, b, isFirstLeg)
+  };
 
   const weekHeaders =
     Array.isArray(teamList) &&
@@ -90,16 +102,23 @@ export const ReportTable = (props: ReportTableProps) => {
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small">
         <TableHead className={classes.tableHead}>
-          <TableCell>Rank</TableCell>
-          <TableCell>Team&nbsp;&&nbsp;Manager</TableCell>
-          <TableCell>Total</TableCell>
-          <TableCell>Current Leg Total</TableCell>
-          <TableCell>Yen</TableCell>
-          {weekHeaders}
+          <TableRow>
+            <TableCell>Rank</TableCell>
+            <TableCell>Team&nbsp;&&nbsp;Manager</TableCell>
+            <TableCell key="leg-total" sortDirection={orderByTotal ? "asc" : "desc"}>
+              <TableSortLabel active direction={orderByTotal ? "asc" : "desc"} onClick={handleSortByTotal}>
+                Total
+              </TableSortLabel>
+            </TableCell>
+            <TableCell>Current Leg Total</TableCell>
+            <TableCell>Yen</TableCell>
+            {weekHeaders}
+          </TableRow>
         </TableHead>
         <TableBody>
           {Array.isArray(teamList) &&
-            teamList.map((team, index) => (
+          teamList.sort((a,b) => getComparator(a, b))
+            .map((team, index) => (
               <TableRow key={team.player_name}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>
@@ -123,12 +142,20 @@ export const ReportTable = (props: ReportTableProps) => {
                           : team.sencondLegWeeklyWinningMoney
                         : '-'}
                     </ListItem>
-                    {team.legWinningMoney !== 0 && (
+                    {isFirstLeg && team.firstLegWinningMoney !== 0 && (
                       <ListItem>
                         <Typography
                           variant="caption"
                           color="primary"
-                        >{`(+${team.legWinningMoney})`}</Typography>
+                        >{`(+${team.firstLegWinningMoney})`}</Typography>
+                      </ListItem>
+                    )}
+                    {!isFirstLeg && team.sencondLegWinningMoney !== 0 && (
+                      <ListItem>
+                        <Typography
+                          variant="caption"
+                          color="primary"
+                        >{`(+${team.sencondLegWinningMoney})`}</Typography>
                       </ListItem>
                     )}
                   </List>

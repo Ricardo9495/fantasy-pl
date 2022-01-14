@@ -12,13 +12,13 @@ const CONFIG = {
   SECOND_POS_RATIO: 0.3,
   FIRST_LEG_RANGE: {
     FROM_WEEK: 0,
-    TO_WEEK: 18,
+    TO_WEEK: 19,
   },
   SECOND_LEG_RANGE: {
     FROM_WEEK: 19,
-    TO_WEEK: 37,
+    TO_WEEK: 38,
   },
-  START_DATE_OF_2ND_LEG: 'Dec 27, 2021 00:00:00'
+  START_DATE_OF_2ND_LEG: 'Dec 28, 2021 00:00:00'
 }
 
 const fetchInfo = async (url: string) => {
@@ -44,8 +44,7 @@ const teamList = async () => {
     const teamList: Array<Team> = await teamWithHistoriesList(league)
     const teamListWithLegsPoints: Array<Team> = calculateLegsPoint(teamList)
     const teamListWithBet: Array<Team> = calculateBet(teamListWithLegsPoints);
-    const sortedTeamList: Array<Team> = sortTeamlist(teamListWithBet);
-    const fullCalculateTeamList: Array<Team> = calculateLegWinningBet(sortedTeamList);
+    const fullCalculateTeamList: Array<Team> = calculateLegWinningBet(teamListWithBet);
 
     return fullCalculateTeamList;
   } catch (error) {
@@ -55,8 +54,14 @@ const teamList = async () => {
 
 const calculateLegWinningBet = (sortedTeamList: Array<Team>) => {
   const bettingTeamList = sortedTeamList.filter(team => team.isBetting);
-  bettingTeamList[0].legWinningMoney = (bettingTeamList.length - 2) * CONFIG.LEG_BET * CONFIG.FIRST_POS_RATIO
-  bettingTeamList[1].legWinningMoney = (bettingTeamList.length - 2) * CONFIG.LEG_BET * CONFIG.SECOND_POS_RATIO
+
+  const firstLegWinning = sortTeamlist(bettingTeamList, true);
+  firstLegWinning[0].firstLegWinningMoney = bettingTeamList.length * CONFIG.LEG_BET * CONFIG.FIRST_POS_RATIO
+  firstLegWinning[1].firstLegWinningMoney = bettingTeamList.length * CONFIG.LEG_BET * CONFIG.SECOND_POS_RATIO
+
+  const secondLegWinning = sortTeamlist(bettingTeamList, false);
+  secondLegWinning[0].sencondLegWinningMoney = bettingTeamList.length * CONFIG.LEG_BET * CONFIG.FIRST_POS_RATIO
+  secondLegWinning[1].sencondLegWinningMoney = bettingTeamList.length * CONFIG.LEG_BET * CONFIG.SECOND_POS_RATIO
 
   return sortedTeamList;
 }
@@ -145,14 +150,14 @@ const calculateBet = (teamList: Array<Team>) => {
       if (index >= team.startBettingWeek - 1) {
             const week = team.history[index];
           if (week.win) {
-            if (index <= CONFIG.FIRST_LEG_RANGE.TO_WEEK) {
+            if (index < CONFIG.FIRST_LEG_RANGE.TO_WEEK) {
               team.firstLegWeeklyWinningMoney += (loser * CONFIG.WEEKLY_BET) / winner;
             } else {
               team.sencondLegWeeklyWinningMoney += (loser * CONFIG.WEEKLY_BET) / winner;
             }
 
           } else {
-            if (index <= CONFIG.FIRST_LEG_RANGE.TO_WEEK) {
+            if (index < CONFIG.FIRST_LEG_RANGE.TO_WEEK) {
               team.firstLegWeeklyWinningMoney -= CONFIG.WEEKLY_BET;
             } else {
               team.sencondLegWeeklyWinningMoney -= CONFIG.WEEKLY_BET;
@@ -166,10 +171,10 @@ const calculateBet = (teamList: Array<Team>) => {
   return teamList;
 }
 
-const sortTeamlist = (teamList: Array<Team>) => {
+const sortTeamlist = (teamList: Array<Team>, isFirstLeg: boolean) => {
   const sortedList = teamList.sort((a, b) => {
-    const rankA = a.total;
-    const rankB = b.total;
+    const rankA = isFirstLeg ? a.firstLegTotal : a.secondLegTotal;
+    const rankB = isFirstLeg ? b.firstLegTotal : b.secondLegTotal;
 
     if (rankA < rankB) {
       return 1;
@@ -185,9 +190,41 @@ const sortTeamlist = (teamList: Array<Team>) => {
   return sortedList;
 }
 
+const sortByTotal = (a: Team, b: Team) => {
+  const rankA = a.total;
+  const rankB = b.total;
+
+  if (rankA < rankB) {
+    return 1;
+  }
+
+  if (rankA > rankB) {
+    return -1;
+  }
+
+  return 0;
+}
+
+const sortByCurrentLegTotal = (a: Team, b: Team, isFirstLeg: boolean) => {
+  const rankA = isFirstLeg ? a.firstLegTotal : a.secondLegTotal;
+  const rankB = isFirstLeg ? b.firstLegTotal : b.secondLegTotal;
+
+  if (rankA < rankB) {
+    return 1;
+  }
+
+  if (rankA > rankB) {
+    return -1;
+  }
+
+  return 0;
+}
+
 export const HELPERS = {
   concatApiUrlWithParameter,
   fetchInfo,
   CONFIG,
-  teamList
+  teamList,
+  sortByTotal,
+  sortByCurrentLegTotal
 }

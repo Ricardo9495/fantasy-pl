@@ -59,11 +59,13 @@ export const ReportTable = (props: ReportTableProps) => {
   }, [isFirstLeg])
 
   const handleSortByTotal = () => {
-    setOrderByTotal(!orderByTotal);
+    if (orderByTotal) return
+    setOrderByTotal(!orderByTotal)
   }
 
   const handleSortByCurrentLegPoint = () => {
-    setOrderByTotal(!orderByTotal);
+    if (!orderByTotal) return
+    setOrderByTotal(!orderByTotal)
   }
 
   const getComparator = (a: Team, b: Team) => {
@@ -109,13 +111,13 @@ export const ReportTable = (props: ReportTableProps) => {
           <TableRow>
             <TableCell>Rank</TableCell>
             <TableCell>Team&nbsp;&&nbsp;Manager</TableCell>
-            <TableCell key="leg-total" sortDirection={orderByTotal ? "asc" : "desc"}>
-              <TableSortLabel active direction={orderByTotal ? "asc" : "desc"} onClick={handleSortByTotal}>
+            <TableCell key="leg-total">
+              <TableSortLabel active={orderByTotal} direction="desc" onClick={handleSortByTotal}>
                 Total
               </TableSortLabel>
             </TableCell>
-            <TableCell key="current-leg-total" sortDirection={orderByTotal ? "desc" : "asc"}>
-              <TableSortLabel active direction={orderByTotal ? "desc" : "asc"} onClick={handleSortByCurrentLegPoint}>
+            <TableCell key="current-leg-total">
+              <TableSortLabel active={!orderByTotal} direction="desc" onClick={handleSortByCurrentLegPoint}>
                 Current Leg Total
               </TableSortLabel>
             </TableCell>

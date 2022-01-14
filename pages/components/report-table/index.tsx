@@ -114,7 +114,7 @@ export const ReportTable = (props: ReportTableProps) => {
                 Total
               </TableSortLabel>
             </TableCell>
-            <TableCell key="leg-total" sortDirection={orderByTotal ? "desc" : "asc"}>
+            <TableCell key="current-leg-total" sortDirection={orderByTotal ? "desc" : "asc"}>
               <TableSortLabel active direction={orderByTotal ? "desc" : "asc"} onClick={handleSortByCurrentLegPoint}>
                 Current Leg Total
               </TableSortLabel>

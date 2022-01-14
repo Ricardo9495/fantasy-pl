@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
 import { Header } from './components/header'
 import { HELPERS } from '../helpers'
@@ -18,6 +18,11 @@ export const Index = (props: IndexProps) => {
   const startOf2ndLeg = new Date(HELPERS.CONFIG.START_DATE_OF_2ND_LEG).getTime()
   const [isFirstLeg, setIsFirstLeg] = useState(currentDate <= startOf2ndLeg)
   const [isDisplayAll, setIsDisplayAll] = useState(false);
+
+  useEffect(() => {
+    setIsDisplayAll(false)
+  }, [isFirstLeg])
+
   return (
     <div className={styles.container}>
       <Head>

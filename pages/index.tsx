@@ -55,7 +55,7 @@ export const Index = (props: IndexProps) => {
 
 export const getServerSideProps = async () => {
   const teamList: Array<Team> = await HELPERS.teamList()
-
+  console.log('teamList-Index', teamList)
   return {
     props: { teamList: teamList },
   }

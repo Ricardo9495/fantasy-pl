@@ -1,9 +1,10 @@
 import { Team } from "../models"
 
 const CONFIG = {
-  LEAGUE_ID: '268268',
+  LEAGUE_ID: '484834',
   LEAGUE_INFO_URL: 'https://fantasy.premierleague.com/api/leagues-classic/${id}/standings/',
   LEAGUE_HISTORY_URL: 'https://fantasy.premierleague.com/api/entry/${id}/history/',
+  JOIN_LEAGUGE_URL: 'https://fantasy.premierleague.com/leagues/auto-join/lzb0ck',
   BANNED_LIST: ['3176134'],
   NOT_BETTING_LIST: ['2698093', '2697661', '7975182'],
   WEEKLY_BET: 200,
@@ -18,7 +19,7 @@ const CONFIG = {
     FROM_WEEK: 19,
     TO_WEEK: 38,
   },
-  START_DATE_OF_2ND_LEG: 'Dec 28, 2021 00:00:00'
+  START_DATE_OF_2ND_LEG: 'Dec 28, 2022 00:00:00'
 }
 
 const fetchInfo = async (url: string) => {
@@ -41,11 +42,15 @@ const concatApiUrlWithParameter = (apiUrl: string, id: string): string => {
 const teamList = async () => {
   try {
     const league: Array<Team> = await leagueInfo()
+    console.log('league', league);
     const teamList: Array<Team> = await teamWithHistoriesList(league)
+    console.log('teamList', teamList);
     const teamListWithLegsPoints: Array<Team> = calculateLegsPoint(teamList)
+    console.log('teamListWithLegsPoints', teamListWithLegsPoints);
     const teamListWithBet: Array<Team> = calculateBet(teamListWithLegsPoints);
+    console.log('teamListWithBet', teamListWithBet);
     const fullCalculateTeamList: Array<Team> = calculateLegWinningBet(teamListWithBet);
-
+    console.log('fullCalculateTeamList', fullCalculateTeamList);
     return fullCalculateTeamList;
   } catch (error) {
     return []
@@ -68,6 +73,10 @@ const calculateLegWinningBet = (sortedTeamList: Array<Team>) => {
 
 const leagueInfo = async () => {
   try {
+    console.log('DEBUG-fetchInfo-URL', concatApiUrlWithParameter(
+      CONFIG.LEAGUE_INFO_URL,
+      CONFIG.LEAGUE_ID
+    ))
     const result = await fetchInfo(
       concatApiUrlWithParameter(
         CONFIG.LEAGUE_INFO_URL,
@@ -76,7 +85,7 @@ const leagueInfo = async () => {
     )
 
     const data = await result.json()
-    return data['standings']['results'].filter(
+    return data['new_entries']['results'].filter(
       (team: Team) => !CONFIG.BANNED_LIST.includes(team.entry.toString())
     )
   } catch (error) {
@@ -98,10 +107,12 @@ const teamWithHistoriesList = async (teamList: Array<Team>) => {
   })
 
   const rest = await Promise.all(fullTeam)
+  // console.log('DEBUG- rest',rest)
   const list: Array<Team> = JSON.parse(JSON.stringify(rest));
   list.forEach((team: Team) => {
     // Cuong start from 10
-    if (team.entry === 8275914) { team.startBettingWeek = 10 };
+    // if (team.entry === 8275914) { team.startBettingWeek = 10 };
+    if(!team.history || team.history.length < 1) return;
     let startWeek = team.history[0].event;
     const firstWeek = 1
     if(startWeek !== firstWeek) {

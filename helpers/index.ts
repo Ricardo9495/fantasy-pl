@@ -1,11 +1,13 @@
 import { Team } from "../models"
 
 const CONFIG = {
-  LEAGUE_ID: '268268',
+  LEAGUE_ID: '484834',
   LEAGUE_INFO_URL: 'https://fantasy.premierleague.com/api/leagues-classic/${id}/standings/',
   LEAGUE_HISTORY_URL: 'https://fantasy.premierleague.com/api/entry/${id}/history/',
-  BANNED_LIST: ['3176134'],
-  NOT_BETTING_LIST: ['2698093', '2697661', '7975182'],
+  JOIN_LEAGUGE_URL: 'https://fantasy.premierleague.com/leagues/auto-join/lzb0ck',
+  JOIN_H2H_URL: 'https://fantasy.premierleague.com/leagues/auto-join/cnk031',
+  BANNED_LIST: ['510600'],
+  NOT_BETTING_LIST: ['3888393', '3808607', '3907773', '2369418', '3411024', '8044411'],
   WEEKLY_BET: 200,
   LEG_BET: 1000,
   FIRST_POS_RATIO: 0.7,
@@ -18,7 +20,7 @@ const CONFIG = {
     FROM_WEEK: 19,
     TO_WEEK: 38,
   },
-  START_DATE_OF_2ND_LEG: 'Dec 28, 2021 00:00:00'
+  START_DATE_OF_2ND_LEG: 'Dec 28, 2022 00:00:00'
 }
 
 const fetchInfo = async (url: string) => {
@@ -45,7 +47,6 @@ const teamList = async () => {
     const teamListWithLegsPoints: Array<Team> = calculateLegsPoint(teamList)
     const teamListWithBet: Array<Team> = calculateBet(teamListWithLegsPoints);
     const fullCalculateTeamList: Array<Team> = calculateLegWinningBet(teamListWithBet);
-
     return fullCalculateTeamList;
   } catch (error) {
     return []
@@ -101,7 +102,8 @@ const teamWithHistoriesList = async (teamList: Array<Team>) => {
   const list: Array<Team> = JSON.parse(JSON.stringify(rest));
   list.forEach((team: Team) => {
     // Cuong start from 10
-    if (team.entry === 8275914) { team.startBettingWeek = 10 };
+    // if (team.entry === 8275914) { team.startBettingWeek = 10 };
+    if(!team.history || team.history.length < 1) return;
     let startWeek = team.history[0].event;
     const firstWeek = 1
     if(startWeek !== firstWeek) {

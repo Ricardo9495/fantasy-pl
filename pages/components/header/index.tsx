@@ -1,7 +1,8 @@
 import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { AppBar, Toolbar, Typography } from '@material-ui/core'
+import { AppBar, Button, Toolbar, Typography } from '@material-ui/core'
 import FplLogo from '../../../public/fpl-logo.svg'
+import { HELPERS } from '../../../helpers'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,6 +24,18 @@ const useStyles = makeStyles((theme: Theme) =>
     title: {
       padding: '5.5rem 2rem',
       color: theme.palette.background.default,
+    },
+    joinDiv: {
+      right: 50,
+      position: "absolute",
+    },
+    joinButton: {
+      marginBottom: 3,
+      width: 10,
+      "&:hover": {
+        backgroundColor: "#04FF86",
+        borderColor: "#00FE8D",
+      }
     },
   })
 )
@@ -49,34 +62,29 @@ const styles = {
   },
 }
 
-// interface AppBarProps {
-//   children: React.ReactElement
-// }
-
-// const ElevationScroll = (props: AppBarProps) => {
-//   const { children } = props
-
-//   const trigger = useScrollTrigger({
-//     disableHysteresis: true,
-//     threshold: 0,
-//   })
-
-//   return React.cloneElement(children, {
-//     elevation: trigger ? 4 : 0,
-//   })
-// }
-
 export const Header = () => {
   const classes = useStyles()
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="secondary">
+      <AppBar position="relative" color="secondary">
         <Toolbar>
           <FplLogo className={classes.svglogo} />
           <Typography variant="h6" color="primary">
-            TOMO FC 2021-2022
+            TOMO FC 2022-2023
           </Typography>
+          <div className={classes.joinDiv}>
+            <div>
+              <Button variant="outlined" color="primary" href={HELPERS.CONFIG.JOIN_LEAGUGE_URL} className={classes.joinButton}>
+                TOMO
+              </Button>
+            </div>
+            <div>
+              <Button variant="outlined" color="primary" href={HELPERS.CONFIG.JOIN_H2H_URL} className={classes.joinButton}>
+                H2H
+              </Button>
+            </div>
+          </div>
         </Toolbar>
       </AppBar>
       <div style={styles.bannerBarStyle}>

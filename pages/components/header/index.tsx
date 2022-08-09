@@ -25,10 +25,13 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: '5.5rem 2rem',
       color: theme.palette.background.default,
     },
-    joinButton: {
+    joinDiv: {
       right: 50,
       position: "absolute",
-      // backgroundColor: "#04FF86",
+    },
+    joinButton: {
+      marginBottom: 3,
+      width: 10,
       "&:hover": {
         backgroundColor: "#04FF86",
         borderColor: "#00FE8D",
@@ -70,9 +73,18 @@ export const Header = () => {
           <Typography variant="h6" color="primary">
             TOMO FC 2022-2023
           </Typography>
-            <Button variant="outlined" color="primary" href={HELPERS.CONFIG.JOIN_LEAGUGE_URL} className={classes.joinButton}>
-              lzb0ck
-            </Button>
+          <div className={classes.joinDiv}>
+            <div>
+              <Button variant="outlined" color="primary" href={HELPERS.CONFIG.JOIN_LEAGUGE_URL} className={classes.joinButton}>
+                TOMO
+              </Button>
+            </div>
+            <div>
+              <Button variant="outlined" color="primary" href={HELPERS.CONFIG.JOIN_H2H_URL} className={classes.joinButton}>
+                H2H
+              </Button>
+            </div>
+          </div>
         </Toolbar>
       </AppBar>
       <div style={styles.bannerBarStyle}>

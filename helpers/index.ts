@@ -5,8 +5,9 @@ const CONFIG = {
   LEAGUE_INFO_URL: 'https://fantasy.premierleague.com/api/leagues-classic/${id}/standings/',
   LEAGUE_HISTORY_URL: 'https://fantasy.premierleague.com/api/entry/${id}/history/',
   JOIN_LEAGUGE_URL: 'https://fantasy.premierleague.com/leagues/auto-join/lzb0ck',
-  BANNED_LIST: ['3176134'],
-  NOT_BETTING_LIST: ['2698093', '2697661', '7975182'],
+  JOIN_H2H_URL: 'https://fantasy.premierleague.com/leagues/auto-join/cnk031',
+  BANNED_LIST: ['510600'],
+  NOT_BETTING_LIST: ['3888393', '3808607', '3907773', '2369418', '3411024', '8044411'],
   WEEKLY_BET: 200,
   LEG_BET: 1000,
   FIRST_POS_RATIO: 0.7,
@@ -42,15 +43,10 @@ const concatApiUrlWithParameter = (apiUrl: string, id: string): string => {
 const teamList = async () => {
   try {
     const league: Array<Team> = await leagueInfo()
-    console.log('league', league);
     const teamList: Array<Team> = await teamWithHistoriesList(league)
-    console.log('teamList', teamList);
     const teamListWithLegsPoints: Array<Team> = calculateLegsPoint(teamList)
-    console.log('teamListWithLegsPoints', teamListWithLegsPoints);
     const teamListWithBet: Array<Team> = calculateBet(teamListWithLegsPoints);
-    console.log('teamListWithBet', teamListWithBet);
     const fullCalculateTeamList: Array<Team> = calculateLegWinningBet(teamListWithBet);
-    console.log('fullCalculateTeamList', fullCalculateTeamList);
     return fullCalculateTeamList;
   } catch (error) {
     return []
@@ -73,10 +69,6 @@ const calculateLegWinningBet = (sortedTeamList: Array<Team>) => {
 
 const leagueInfo = async () => {
   try {
-    console.log('DEBUG-fetchInfo-URL', concatApiUrlWithParameter(
-      CONFIG.LEAGUE_INFO_URL,
-      CONFIG.LEAGUE_ID
-    ))
     const result = await fetchInfo(
       concatApiUrlWithParameter(
         CONFIG.LEAGUE_INFO_URL,
@@ -85,7 +77,7 @@ const leagueInfo = async () => {
     )
 
     const data = await result.json()
-    return data['new_entries']['results'].filter(
+    return data['standings']['results'].filter(
       (team: Team) => !CONFIG.BANNED_LIST.includes(team.entry.toString())
     )
   } catch (error) {
@@ -107,7 +99,6 @@ const teamWithHistoriesList = async (teamList: Array<Team>) => {
   })
 
   const rest = await Promise.all(fullTeam)
-  // console.log('DEBUG- rest',rest)
   const list: Array<Team> = JSON.parse(JSON.stringify(rest));
   list.forEach((team: Team) => {
     // Cuong start from 10

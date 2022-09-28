@@ -7,7 +7,7 @@ const CONFIG = {
   JOIN_LEAGUGE_URL: 'https://fantasy.premierleague.com/leagues/auto-join/lzb0ck',
   JOIN_H2H_URL: 'https://fantasy.premierleague.com/leagues/auto-join/cnk031',
   BANNED_LIST: ['510600'],
-  NOT_BETTING_LIST: ['3888393', '3808607', '3907773', '2369418', '3411024', '8044411'],
+  NOT_BETTING_LIST: ['3888393', '3808607', '3907773', '2369418', '3411024', '8044411', '8865793'],
   WEEKLY_BET: 200,
   LEG_BET: 1000,
   FIRST_POS_RATIO: 0.7,
@@ -101,8 +101,8 @@ const teamWithHistoriesList = async (teamList: Array<Team>) => {
   const rest = await Promise.all(fullTeam)
   const list: Array<Team> = JSON.parse(JSON.stringify(rest));
   list.forEach((team: Team) => {
-    // Cuong start from 10
-    // if (team.entry === 8275914) { team.startBettingWeek = 10 };
+    // Thong start from 5
+    if (team.entry === 9616706) { team.startBettingWeek = 6 };
     if(!team.history || team.history.length < 1) return;
     let startWeek = team.history[0].event;
     const firstWeek = 1
@@ -126,6 +126,7 @@ const calculateLegsPoint = (teamList: Array<Team>) => {
 
 const calculateBet = (teamList: Array<Team>) => {
   for (let index = teamList[0].history.length - 1; index >= 0; --index) {
+    if (index === 6) { continue; }
     let winner = 0;
     let loser = 0;
 

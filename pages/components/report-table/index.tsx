@@ -73,7 +73,6 @@ export const ReportTable = (props: ReportTableProps) => {
     ? HELPERS.sortByTotal(a, b)
     : HELPERS.sortByCurrentLegTotal(a, b, isFirstLeg)
   };
-  console.log('teamList', teamList);
   const weekHeaders =
     Array.isArray(teamList) &&
     teamList[0] &&

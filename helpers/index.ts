@@ -102,9 +102,10 @@ const teamWithHistoriesList = async (teamList: Array<Team>) => {
   const list: Array<Team> = JSON.parse(JSON.stringify(rest));
   list.forEach((team: Team) => {
     // Thong start from 5
-    if (team.entry === 9616706) { team.startBettingWeek = 6 };
+    if (team.entry === 9616706) { team.startBettingWeek = 5 };
     if(!team.history || team.history.length < 1) return;
     let startWeek = team.history[0].event;
+    if (team.entry === 9616706) { startWeek = team.startBettingWeek - 1 };
     const firstWeek = 1
     if(startWeek !== firstWeek) {
       while(startWeek > firstWeek) {
@@ -130,12 +131,11 @@ const calculateBet = (teamList: Array<Team>) => {
     let winner = 0;
     let loser = 0;
 
-    const bettingTeamList = teamList.filter(team => team.isBetting);
+    const bettingTeamList = teamList.filter(team => team.isBetting && team.startBettingWeek - 1 <= index);
     const weekPoints = bettingTeamList.map(team => (team.history[index].points - team.history[index].event_transfers_cost));
     const highestPoint = Math.max(...weekPoints);
 
     bettingTeamList.forEach((team) => {
-      if (index >= team.startBettingWeek - 1) {
         const week = team.history[index];
         const week_point = week.points - week.event_transfers_cost;
         if (week_point == highestPoint) {
@@ -146,28 +146,25 @@ const calculateBet = (teamList: Array<Team>) => {
           week.win = false;
           loser++;
         }
-      }
     })
 
     bettingTeamList.forEach((team) => {
-      if (index >= team.startBettingWeek - 1) {
-            const week = team.history[index];
-          if (week.win) {
-            if (index < CONFIG.FIRST_LEG_RANGE.TO_WEEK) {
-              team.firstLegWeeklyWinningMoney += (loser * CONFIG.WEEKLY_BET) / winner;
-            } else {
-              team.sencondLegWeeklyWinningMoney += (loser * CONFIG.WEEKLY_BET) / winner;
-            }
-
+        const week = team.history[index];
+        if (week.win) {
+          if (index < CONFIG.FIRST_LEG_RANGE.TO_WEEK) {
+            team.firstLegWeeklyWinningMoney += (loser * CONFIG.WEEKLY_BET) / winner;
           } else {
-            if (index < CONFIG.FIRST_LEG_RANGE.TO_WEEK) {
-              team.firstLegWeeklyWinningMoney -= CONFIG.WEEKLY_BET;
-            } else {
-              team.sencondLegWeeklyWinningMoney -= CONFIG.WEEKLY_BET;
-            }
+            team.sencondLegWeeklyWinningMoney += (loser * CONFIG.WEEKLY_BET) / winner;
+          }
+
+        } else {
+          if (index < CONFIG.FIRST_LEG_RANGE.TO_WEEK) {
+            team.firstLegWeeklyWinningMoney -= CONFIG.WEEKLY_BET;
+          } else {
+            team.sencondLegWeeklyWinningMoney -= CONFIG.WEEKLY_BET;
           }
         }
-      }
+    }
     )
   }
 

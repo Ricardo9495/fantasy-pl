@@ -1,7 +1,6 @@
 import {
   List,
   ListItem,
-  makeStyles,
   Paper,
   Table,
   TableBody,
@@ -10,13 +9,15 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
+  Theme,
   Typography,
-} from '@material-ui/core'
+} from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import theme from '../../../theme'
 import { Team } from '../../../models'
-import clsx from 'clsx'
 import { HELPERS } from '../../../helpers'
+import { createStyles, makeStyles } from '@mui/styles'
+import clsx from 'clsx';
+
 
 interface ReportTableProps {
   teamList: Array<Team>
@@ -24,20 +25,22 @@ interface ReportTableProps {
   isDisplayAll: boolean
 }
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 1200,
-  },
-  tableHead: {
-    backgroundColor: '#EFEFEF',
-  },
-  entryName: {
-    color: theme.palette.primary.light,
-  },
-  winningCell: {
-    color: theme.palette.primary.light,
-  },
-})
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    table: {
+      minWidth: 1200,
+    },
+    tableHead: {
+      backgroundColor: '#EFEFEF',
+    },
+    entryName: {
+      color: theme.palette.primary.light,
+    },
+    winningCell: {
+      color: theme.palette.primary.light,
+    },
+  })
+)
 
 export const ReportTable = (props: ReportTableProps) => {
   const { teamList, isFirstLeg, isDisplayAll } = props
@@ -157,7 +160,9 @@ export const ReportTable = (props: ReportTableProps) => {
                         <Typography
                           variant="caption"
                           color="primary"
-                        >{`(+${team.firstLegWinningMoney})`}</Typography>
+                        >
+                          {`(+${team.firstLegWinningMoney})`}
+                        </Typography>
                       </ListItem>
                     )}
                     {!isFirstLeg && team.sencondLegWinningMoney !== 0 && (
@@ -165,7 +170,9 @@ export const ReportTable = (props: ReportTableProps) => {
                         <Typography
                           variant="caption"
                           color="primary"
-                        >{`(+${team.sencondLegWinningMoney})`}</Typography>
+                        >
+                          {`(+${team.sencondLegWinningMoney})`}
+                        </Typography>
                       </ListItem>
                     )}
                   </List>

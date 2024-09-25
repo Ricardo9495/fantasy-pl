@@ -1,13 +1,13 @@
 import {
-  createStyles,
   FormControl,
-  makeStyles,
   Select,
+  SelectChangeEvent,
   Switch,
   Theme,
   Typography,
-} from '@material-ui/core'
+} from '@mui/material'
 import React from 'react'
+import { createStyles, makeStyles } from '@mui/styles'
 
 interface LegSelectProps {
   isFirstLeg: boolean
@@ -38,7 +38,7 @@ export const LegSelect = (props: LegSelectProps) => {
   const classes = useStyles()
 
   const handleSelectChange = (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>
+    event: SelectChangeEvent<string>
   ) => {
     setIsFirstLeg(event.target.value === OPTIONS[0])
   }

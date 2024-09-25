@@ -1,13 +1,13 @@
 import { Team } from "../models"
 
 const CONFIG = {
-  LEAGUE_ID: '484834',
+  LEAGUE_ID: '328861',
   LEAGUE_INFO_URL: 'https://fantasy.premierleague.com/api/leagues-classic/${id}/standings/',
   LEAGUE_HISTORY_URL: 'https://fantasy.premierleague.com/api/entry/${id}/history/',
   JOIN_LEAGUGE_URL: 'https://fantasy.premierleague.com/leagues/auto-join/lzb0ck',
   JOIN_H2H_URL: 'https://fantasy.premierleague.com/leagues/auto-join/cnk031',
-  BANNED_LIST: ['510600'],
-  NOT_BETTING_LIST: ['3888393', '3808607', '3907773', '2369418', '3411024', '8044411', '8865793'],
+  BANNED_LIST: [''],
+  NOT_BETTING_LIST: ['2877870', '5188423', '7329990'],
   WEEKLY_BET: 200,
   LEG_BET: 1000,
   FIRST_POS_RATIO: 0.7,
@@ -20,7 +20,7 @@ const CONFIG = {
     FROM_WEEK: 19,
     TO_WEEK: 38,
   },
-  START_DATE_OF_2ND_LEG: 'Dec 28, 2022 00:00:00'
+  START_DATE_OF_2ND_LEG: 'Dec 28, 2024 00:00:00'
 }
 
 const fetchInfo = async (url: string) => {
@@ -57,12 +57,20 @@ const calculateLegWinningBet = (sortedTeamList: Array<Team>) => {
   const bettingTeamList = sortedTeamList.filter(team => team.isBetting);
 
   const firstLegWinning = sortTeamlist(bettingTeamList, true);
-  firstLegWinning[0].firstLegWinningMoney = bettingTeamList.length * CONFIG.LEG_BET * CONFIG.FIRST_POS_RATIO
-  firstLegWinning[1].firstLegWinningMoney = bettingTeamList.length * CONFIG.LEG_BET * CONFIG.SECOND_POS_RATIO
+  // firstLegWinning[0].firstLegWinningMoney = bettingTeamList.length * CONFIG.LEG_BET * CONFIG.FIRST_POS_RATIO
+  // firstLegWinning[1].firstLegWinningMoney = bettingTeamList.length * CONFIG.LEG_BET * CONFIG.SECOND_POS_RATIO
+  
+  // 2024-2025: 13 players
+  firstLegWinning[0].firstLegWinningMoney = 9000
+  firstLegWinning[1].firstLegWinningMoney = 4000
 
   const secondLegWinning = sortTeamlist(bettingTeamList, false);
-  secondLegWinning[0].sencondLegWinningMoney = bettingTeamList.length * CONFIG.LEG_BET * CONFIG.FIRST_POS_RATIO
-  secondLegWinning[1].sencondLegWinningMoney = bettingTeamList.length * CONFIG.LEG_BET * CONFIG.SECOND_POS_RATIO
+  // secondLegWinning[0].sencondLegWinningMoney = bettingTeamList.length * CONFIG.LEG_BET * CONFIG.FIRST_POS_RATIO
+  // secondLegWinning[1].sencondLegWinningMoney = bettingTeamList.length * CONFIG.LEG_BET * CONFIG.SECOND_POS_RATIO
+
+  // 2024-2025: 13 players
+  secondLegWinning[0].sencondLegWinningMoney = 9000
+  secondLegWinning[1].sencondLegWinningMoney = 4000
 
   return sortedTeamList;
 }

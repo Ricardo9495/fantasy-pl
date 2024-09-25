@@ -157,7 +157,9 @@ export const ReportTable = (props: ReportTableProps) => {
                         <Typography
                           variant="caption"
                           color="primary"
-                        >{`(+${team.firstLegWinningMoney})`}</Typography>
+                        >
+                          {`(+${team.firstLegWinningMoney})`}
+                        </Typography>
                       </ListItem>
                     )}
                     {!isFirstLeg && team.sencondLegWinningMoney !== 0 && (
@@ -165,7 +167,9 @@ export const ReportTable = (props: ReportTableProps) => {
                         <Typography
                           variant="caption"
                           color="primary"
-                        >{`(+${team.sencondLegWinningMoney})`}</Typography>
+                        >
+                          {`(+${team.sencondLegWinningMoney})`}
+                        </Typography>
                       </ListItem>
                     )}
                   </List>

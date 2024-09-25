@@ -4,7 +4,7 @@
 const withFonts = require('next-fonts')
 
 module.exports = withFonts({
-  mode: 'development',
+  // mode: 'development',
   reactStrictMode: true,
   webpack(config) {
     config.module.rules.push({

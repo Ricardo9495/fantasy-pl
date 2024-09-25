@@ -1,8 +1,7 @@
 import React from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { AppBar, Button, Toolbar, Typography } from '@material-ui/core'
+import { createStyles, makeStyles } from '@mui/styles'
+import { AppBar, Toolbar, Typography, Theme } from '@mui/material'
 import FplLogo from '../../../public/fpl-logo.svg'
-import { HELPERS } from '../../../helpers'
 import Image from 'next/image'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -75,7 +74,7 @@ export const Header = () => {
               {/* <Button variant="outlined" color="primary" href={HELPERS.CONFIG.JOIN_LEAGUGE_URL} className={classes.joinButton}>
                 TOMO
               </Button> */}
-              <Image src="/JP.gif" width={60} height={42} />
+              <Image alt="flag" src="/JP.gif" width={60} height={42} />
             </div>
             {/* <div>
               <Button variant="outlined" color="primary" href={HELPERS.CONFIG.JOIN_H2H_URL} className={classes.joinButton}>
